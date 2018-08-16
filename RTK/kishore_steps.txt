@@ -1,0 +1,51 @@
+git clone https://github.com/richardstechnotes/RTIMULib2
+
+cd /usr/bin
+
+arm-linux-gnueabi-g++
+
+arm-linux-gnueabi-g++ --version
+
+cd cross_compile/
+
+cd RTIMULib2/
+
+cd RTIMULib/
+
+vi CMakeLists.txt => Change file content
+-------------------------
+    IF(UNIX)
+        ADD_LIBRARY(RTIMULib SHARED ${LIBRTIMU_SRCS})
++++     ADD_LIBRARY(RTIMULibst STATIC ${LIBRTIMU_SRCS})
+        SET_PROPERTY(TARGET RTIMULib PROPERTY VERSION ${RTIMULIB_VERSION})
+        SET_PROPERTY(TARGET RTIMULib PROPERTY SOVERSION ${RTIMULIB_VERSION_MAJOR})
+        INSTALL(TARGETS RTIMULib DESTINATION lib)
+        INSTALL(DIRECTORY . DESTINATION include FILES_MATCHING PATTERN "*.h")
+    ENDIF(UNIX)
+-------------------------
+
+mkdir build && cd build
+
+cmake ..
+
+vi CMakeCache.txt => Change file content
+--------------------------
+    //CXX compiler
+    CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/arm-linux-gnueabi-g++
+--------------------------
+
+
+make
+
+ls -lrth
+
+cd ../..        [Git Repository]
+
+cd Linux/
+
+cd RTIMULibDrive
+
+arm-linux-gnueabi-g++ RTIMULibDrive.cpp -static -o demo -I/home/arijit/cross_compile/RTIMULib2/RTIMULib -L/home/arijit/cross_compile/RTIMULib2/RTIMULib/build -lRTIMULibst
+
+
+
